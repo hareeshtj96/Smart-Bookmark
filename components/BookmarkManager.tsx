@@ -26,7 +26,7 @@ export default function BookmarkManager({
     const supabase = createClient();
 
     // Pagination
-    const ITEMS_PER_PAGE = 5;
+    const ITEMS_PER_PAGE = 6;
     const [currentPage, setCurrentPage] = useState(1);
 
     const totalPages = Math.ceil(bookmarks.length / ITEMS_PER_PAGE);
@@ -97,7 +97,7 @@ export default function BookmarkManager({
         if (error) {
             toast.error("Failed to add bookmark");
         } else {
-            // setBookmarks((prev) => [...prev, data]);
+            setBookmarks((prev) => [...prev, data]);
             toast.success("Bookmark added successfully");
             setTitle("");
             setUrl("");
