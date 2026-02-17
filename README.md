@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+**Smart Bookmark App**
+A modern bookmark manager built with Next.js and Supabase that supports realtime updates across multiple tabs using Supabase Realtime.
 
-## Getting Started
+Live Demo
+Deployment Link: https://smart-bookmark-theta-seven.vercel.app/
 
-First, run the development server:
+**Features**
+- Add bookmarks
+- Delete bookmarks
+- Realtime sync across multiple tabs
+- Responsive design
 
-```bash
+
+**Tech Stack**
+- Next.js
+- TypeScript
+- Supabase
+- Tailwind CSS
+- Framer motion
+- Sonner
+
+**How It Works**
+1. Bookmarks are stored in Supabase.
+2. A reatime subscription listens to changes in the 'bookmarks' table.
+3. When a bookmark is inserted or deleted: - All open tabs receive updates instantly.
+4. React state updates the UI automatically.
+
+
+**Installation & Setup**
+
+**Clone the Repository**
+
+git clone https://github.com/hareeshtj96/Smart-Bookmark.git
+
+Navigate into the Project 
+
+cd Smart-Bookmark
+
+Install Dependencies
+
+npm install
+
+Create Environment File
+
+create a .env.local file and add
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+
+Run the Project
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will run at :: http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Challenges Faced**
 
-## Learn More
+Realtime Inset not updating Same Tab::  
+When two tabs were open:
+Adding a bookmark updated the second tab instantly.
+The tab that performed the insert did NOT update.
+It worked on localhost but failed in production.
 
-To learn more about Next.js, take a look at the following resources:
+Root Cause
+The UI relied only on Supabase Realtime to update state.
+In production, network timing caused a race condition.
+The insert event sometimes did not update local state correctly.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Solution
+I implemented an UI update strategy. Instead of waiting for the realtime event to update the UI, I immediately updated the local state as soon as the bookmark was successfully inserted into the database.
+This ensured
+- The current tab updates instantly.
+- Other open tabs sycn through Supabase Realtime.
+- No refresh is required.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
